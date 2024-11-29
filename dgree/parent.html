@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واجهة أولياء الأمور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="parent-interface">
+        <header>
+            <img src="image/school-logo.png" alt="شعار المدرسة" class="logo"> <!-- شعار المدرسة -->
+            <h1>مرحبًا بكم في صفحة أولياء الأمور والطلبة
+            <p>أدخل أسم الطالب الثلاثي لعرض أستمارة التقييم</p>
+        </header>
+        
+        <form action="results.html" method="POST" class="search-form" onsubmit="searchFile(event)">
+            <input type="text" id="studentName" placeholder="أدخل اسم الطالب" required>
+            <button type="submit">بحث</button>
+        </form>
+        
+        <!-- مكان عرض النتائج مثل الدرجات -->
+        <div id="grades-results">
+            <!-- هنا سيظهر PDF أو أي نتيجة أخرى بعد البحث -->
+        </div>
+    </div>
+
+    <script>
+        function searchFile(event) {
+            event.preventDefault();
+            const studentName = document.getElementById("studentName").value;
+            const storedFiles = JSON.parse(localStorage.getItem("files")) || [];
+            const fileFound = storedFiles.find(file => file.name.includes(studentName));
+
+            const resultsDiv = document.getElementById("grades-results");
+            resultsDiv.innerHTML = "";  // مسح النتائج القديمة
+
+            if (fileFound) {
+                const fileLink = document.createElement("a");
+                fileLink.href = fileFound.name;  // رابط للملف
+                fileLink.textContent = `تحميل ملف ${fileFound.name}`;
+                resultsDiv.appendChild(fileLink);
+            } else {
+                resultsDiv.textContent = "لم يتم العثور على ملف لهذا الطالب.";
+            }
+        }
+    </script>
+</body>
+</html>
